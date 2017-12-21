@@ -6,35 +6,54 @@ var url = require('url');
 // require more modules/folders here!
 var helpers = require('./http-helpers');
 
+
 exports.handleRequest = function (req, res) {
   
-  console.log('LOGGING THE REQ s', req);
+  
   if (req.method === 'GET' && req.url === '/') {
   
     fs.readFile(__dirname + '/public/index.html', 'utf8', (err, data) => {
+     
       if (err) {
         throw err;
       }
       
-      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.writeHead(200, { 'Content-Type': 'application/json', 'access-control-max-age': 10000 });
       res.end(JSON.stringify(data));
     });
-  
- 
-  } else if (req.method === 'POST') {
     
-    fs.appendFile(path.resolve(__dirname, '../archives/sites/sites.txt'), 'data', (err) => {
-      if (err) { throw err };
-      //console.log('data appended');
+  } else if (req.method === 'GET' && req.url === '/www.google.com') {
+    console.log('URL====', req.url);
+    
+    fs.readFile(path.resolve(__dirname, '../test/testdata/sites/www.google.com'), 'utf8', (err, data) => {
+     
+      if (err) {
+        throw err;
+      }
+      
+      res.writeHead(200, { 'Content-Type': 'application/json', 'access-control-max-age': 10000 });
+      res.end(JSON.stringify(data));
     });
+    
+  } else if (req.method === 'POST') {
+    let body = [];
+    
+    req.on('data', (chunk) => {
+      body.push(chunk);
+    }).on('end', () => {
+      body = body.join('');
+      console.log('BODYYYYYYYYY', body.slice(4));
+      // body = Buffer.concat(body).toString();
+      fs.appendFile(path.resolve(__dirname, '../archives/sites/sites.txt'), body.slice(4) + '\n', 'utf8', (err) => {
+        if (err) { throw err; }
+        console.log('data appended');
+      });
+      res.writeHead(302);
+    });  
+   
   } else {
     res.writeHead(404);
     res.end();
   }
   
 };
-
-// http.createServer(function (req, res) {
-//     var query = url.parse(req.url,true).query;
-//     res.end(JSON.stringify(query));
-// }).listen(3333);
