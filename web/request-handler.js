@@ -18,32 +18,30 @@ exports.handleRequest = function (req, res) {
         throw err;
       }
       
-      res.writeHead(200, { 'Content-Type': 'application/json', 'access-control-max-age': 10000 });
+      res.writeHead(200, { 'Content-Type': 'application/json', 'access-control-max-age': 10 });
       res.end(JSON.stringify(data));
     });
     
   } else if (req.method === 'GET' && req.url === '/www.google.com') {
-    console.log('URL====', req.url);
-    
+
     fs.readFile(path.resolve(__dirname, '../test/testdata/sites/www.google.com'), 'utf8', (err, data) => {
      
       if (err) {
         throw err;
       }
       
-      res.writeHead(200, { 'Content-Type': 'application/json', 'access-control-max-age': 10000 });
+      res.writeHead(200, { 'Content-Type': 'application/json', 'access-control-max-age': 10 });
       res.end(JSON.stringify(data));
     });
     
   } else if (req.method === 'POST') {
+    
     let body = [];
     
     req.on('data', (chunk) => {
       body.push(chunk);
     }).on('end', () => {
       body = body.join('');
-      console.log('BODYYYYYYYYY', body.slice(4));
-      // body = Buffer.concat(body).toString();
       fs.appendFile(path.resolve(__dirname, '../archives/sites/sites.txt'), body.slice(4) + '\n', 'utf8', (err) => {
         if (err) { throw err; }
         console.log('data appended');

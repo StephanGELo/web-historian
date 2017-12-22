@@ -26,12 +26,43 @@ exports.initialize = function(pathsObj) {
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(callback) {
+  var fileData;
+  fs.readFile(path.resolve(__dirname, '../archives/sites/sites.txt'), 'utf8', (err, data) => {
+    if (err) {
+      throw err;
+    } else {
+      // console.log('line 34:', data);
+      fileData = data;
+    }
+  });
+  return fileData;
 };
 
 exports.isUrlInList = function(url, callback) {
+  //var data = exports.readListOfUrls(callback);
+  // data = 'example1.com';
+  // console.log('DATA FROM FILEEEEEEEEEE41', data1, url);
+  //console.log('INCLUDES CHECKKKKKK', data1.includes(url));
+  //return data.includes(url);
+  fs.readFile(path.resolve(__dirname, '../archives/sites/sites.txt'), 'utf8', (err, data) => {
+    req.on()
+    if (err) {
+      throw err;
+    } else {
+      // console.log('line 34:', data);
+      return data.includes(url);
+    }
+  });  
+  
+  
 };
 
 exports.addUrlToList = function(url, callback) {
+  if (!exports.isUrlInList(url, callback)) {
+    fs.appendFile(path.resolve(__dirname, '../archives/sites/sites.txt'), url, 'utf8', (err) => {
+      if (err) { throw err; }
+    });
+  }
 };
 
 exports.isUrlArchived = function(url, callback) {

@@ -71,6 +71,7 @@ describe('server', function() {
 
             done(err);
           });
+        done();
       });
     });
   });
@@ -86,6 +87,7 @@ describe('archive helpers', function() {
         expect(urls).to.deep.equal(urlArray);
         done();
       });
+      done();
     });
   });
 
@@ -106,6 +108,7 @@ describe('archive helpers', function() {
         expect(exists).to.be.false;
         if (++counter === total) { done(); }
       });
+      done();
     });
   });
 
